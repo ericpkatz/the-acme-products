@@ -1,31 +1,29 @@
 const ul = document.querySelector('ul');
-const button = document.querySelector('button');
 
-button.addEventListener('click', function(){
-  const rnd = Math.ceil(Math.random()*1000);
-  const name = `Product-${rnd}`;
-  const product = { name };
 
-  products.push(product);
-  renderProducts();
-});
-
-const products = [
-  { name: 'foo' },
-  { name: 'bar' },
-  { name: 'bazz' },
-  { name: 'quq' }
-];
+let products = [];
 
 function renderProducts(){
   const html = products.map(function(product){
+    console.log(product);
     return `
-      <li>${ product.name }</li>
+      <li>
+        <h2>${ product.name }</h2>
+        $${product.suggestedPrice}
+        <p>
+        ${product.description}
+        </p>
+      </li>
     `;
   }).join('');
   ul.innerHTML = html;
 }
 
+async function fetchProducts(){
+  const response = await fetch('https://www.acme-api.com/api/products');
+  const json = await response.json();
+  products = json;
+  renderProducts();
+}
 
-renderProducts();
-
+fetchProducts();
